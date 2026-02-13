@@ -9,7 +9,7 @@ const dev = process.env.ROLLUP_WATCH;
 export default {
   input: "src/main.ts",
   output: {
-    file: "card-mod.js",
+    file: "dist/card-mod.js",
     format: "es",
   },
   plugins: [

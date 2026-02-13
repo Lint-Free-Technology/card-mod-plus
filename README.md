@@ -1,14 +1,14 @@
 # card-mod 4
 
+Forked from [thomasloven/lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod).
+
 Allows you to apply CSS styles to various elements of the Home Assistant frontend.
 
 ## Installing
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Lint-Free-Technology&repository=lovelace-card-mod&category=plugin)
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=thomasloven&repository=lovelace-card-mod)
-
-Install using HACS or [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
+To install via HACS, add this repo [https://github.com/Lint-Free-Technology/lovelace-card-mod](https://github.com/Lint-Free-Technology/lovelace-card-mod) as a [custom HACS repository](https://www.hacs.xyz/docs/faq/custom_repositories/)  using type `Dashboard`. Use the button above to do this in one step. You are best to remove [thomasloven/lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod) in your HACS to avoid confusion as to what repo you are using.
 
 ### Performance improvements
 

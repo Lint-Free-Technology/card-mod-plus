@@ -17,23 +17,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/configure-pages@v5
+      - uses: actions/setup-python@v6
         with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          pip install zensical
-
-      - name: Build site
-        run: zensical build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+          python-version: 3.x
+      - run: pip install zensical
+        working-directory: docs
+      - run: zensical build --clean
+        working-directory: docs
+      - uses: actions/upload-pages-artifact@v4
         with:
-          path: ./site
+          path: docs/site
+      - uses: actions/deploy-pages@v4
 
   deploy:
     environment:

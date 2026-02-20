@@ -4,7 +4,6 @@
   "documentation": "https://uix.lf.technology",
   "issue_tracker": "https://github.com/Lint-Free-Technology/uix/issues",
   "codeowners": [
-    "@dcapslock",
     "@Lint-Free-Technology"
   ],
   "config_flow": true,

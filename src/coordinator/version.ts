@@ -11,10 +11,10 @@ export const VersionMixin = (SuperClass) => {
     constructor() {
       super();
       this._browserVersion = pjson.version;
-      this.addEventListener("card-mod-plus-ready", async () => {
+      this.addEventListener("uix-ready", async () => {
         await this._checkVersion();
       });
-      this.addEventListener("card-mod-plus-disconnected", () => {
+      this.addEventListener("uix-disconnected", () => {
         this._versionNotificationPending = false;
       });
     }
@@ -42,7 +42,7 @@ export const VersionMixin = (SuperClass) => {
                 false,
                 1000)
       } while (haToast);
-      const message = `Card-mod Plus version mismatch! Browser: ${clientVersion}, Home Assistant: ${serverVersion}`;
+      const message = `UIX version mismatch! Browser: ${clientVersion}, Home Assistant: ${serverVersion}`;
       const action = {
         text: "Reload",
         action: () => Actions.clear_cache()

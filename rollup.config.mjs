@@ -9,14 +9,14 @@ const dev = process.env.ROLLUP_WATCH;
 export default {
   input: "src/main.ts",
   output: {
-    file: "custom_components/card_mod_plus/card-mod-plus.js",
+    file: "custom_components/uix/uix.js",
     format: "es",
   },
   plugins: [
     nodeResolve(),
     json(),
     typescript(),
-    getBabelOutputPlugin({ presets: ["@babel/preset-env"] }),
+    // getBabelOutputPlugin({ presets: ["@babel/preset-env"] }),
     !dev && terser({ format: { comments: false } }),
   ],
 };

@@ -1,7 +1,7 @@
 import { patch_object, patch_element } from "../helpers/patch_function";
-import { apply_card_mod } from "../helpers/apply_card_mod";
+import { apply_uix } from "../helpers/apply_uix";
 import { await_element } from "../helpers/selecttree";
-import { ModdedElement } from "../helpers/apply_card_mod";
+import { ModdedElement } from "../helpers/apply_uix";
 
 /*
 Patch the hui-entities-card specifically in order to handle individual styling of each row
@@ -22,7 +22,7 @@ class HuiEntitiesCardPatch extends ModdedElement {
     const apply = async () => {
       await await_element(row);
       patch_object(row, ModdedElement);
-      apply_card_mod(row, "row", config?.card_mod, { config }, true, cls);
+      apply_uix(row, "row", config?.uix ?? config?.card_mod, { config }, true, cls);
       row.addEventListener("ll-rebuild", apply);
     };
 
@@ -51,7 +51,7 @@ class HuiConditionalRowPatch extends ModdedElement {
     const apply = async () => {
       await await_element(row);
       patch_object(row, ModdedElement);
-      apply_card_mod(row, "row", config.row.card_mod, { config: config.row }, true, cls);
+      apply_uix(row, "row", config.row.uix ?? config.row.card_mod, { config: config.row }, true, cls);
       row.addEventListener("ll-rebuild", apply);
     };
 

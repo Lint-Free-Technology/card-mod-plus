@@ -1,10 +1,10 @@
 import logging
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.components.websocket_api import (
     event_message,
     async_register_command,
 )
 from homeassistant.components import websocket_api
-from homeassistant.core import callback
 import voluptuous as vol
 
 from .helpers import get_version
@@ -15,8 +15,8 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-async def async_setup_connection(hass):
-    version = get_version(hass)
+async def async_setup_connection(hass: HomeAssistant) -> None:
+    version = await hass.async_add_executor_job(get_version, hass)
 
     @websocket_api.websocket_command(
         {
@@ -24,7 +24,7 @@ async def async_setup_connection(hass):
         }
     )
     @websocket_api.async_response
-    async def handle_connect(hass, connection, msg):
+    async def handle_connect(hass: HomeAssistant, connection, msg):
         """Handle a connection request."""
 
         @callback

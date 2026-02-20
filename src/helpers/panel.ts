@@ -122,7 +122,7 @@ function _panel_state_update() {
     }
     if (browserPath !== panelPath) {
       console.groupCollapsed(
-        "Card-mod: cannot resolve Panel information after 2s."
+        "UIX: cannot resolve Panel information after 2s."
       );
       console.log("Browser path:", browserPath);
       console.log("Panel path:", panelPath);
@@ -141,7 +141,7 @@ export function getPanelState(): Promise<any> {
   return PanelState as Promise<any>;
 }
 
-window.addEventListener("card-mod-bootstrap", async (ev: CustomEvent) => {
+window.addEventListener("uix-bootstrap", async (ev: CustomEvent) => {
   ev.stopPropagation();
   ["popstate", "location-changed"].forEach((event) => {
     window.addEventListener(event, async () => {
@@ -149,7 +149,7 @@ window.addEventListener("card-mod-bootstrap", async (ev: CustomEvent) => {
       _panel_state_update();
       PanelState.then(() => {
         document.dispatchEvent(
-          new CustomEvent("cm_update", { detail: { variablesChanged: true } })
+          new CustomEvent("uix_update", { detail: { variablesChanged: true } })
         );
       });
     });

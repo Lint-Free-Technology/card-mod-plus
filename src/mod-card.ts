@@ -18,7 +18,7 @@ class ModCard extends LitElement {
 
   setConfig(config: any) {
     this._config = JSON.parse(JSON.stringify(config));
-    let style = this._config.card_mod?.style || this._config.style;
+    let style = this._config?.uix?.style || this._config?.card_mod?.style || this._config?.style;
 
     if (style === undefined) {
       style = NO_STYLE;
@@ -30,9 +30,9 @@ class ModCard extends LitElement {
       style["."] = NO_STYLE;
     }
 
-    this._config.card_mod = {
+    this._config.uix = {
       style,
-      debug: this._config.card_mod?.debug || false,
+      debug: this._config.uix?.debug || this._config.card_mod?.debug || false,
     };
 
     this.build_card(config.card);
@@ -51,13 +51,13 @@ class ModCard extends LitElement {
     window.setTimeout(() => {
       if (this.card?.shadowRoot?.querySelector("ha-card")) {
         console.info(
-          "%cYou are doing it wrong!",
+          "%cCheck your UIX configuration!",
           "color: red; font-weight: bold"
         );
         let cardName = this.card.localName.replace(/hui-(.*)-card/, "$1");
 
         console.info(
-          `mod-card should NEVER be used with a card that already has a ha-card element, such as ${cardName}`
+          `mod-card should RARELY be used with a card that already has a ha-card element, such as ${cardName}`
         );
       }
     }, 3000);

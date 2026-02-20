@@ -9,31 +9,31 @@ import pjson from "../package.json";
 import { get_theme } from "./helpers/themes";
 import { selectTree } from "./helpers/selecttree";
 import {
-  apply_card_mod,
-  apply_card_mod_compatible,
-  CardModStyle,
-} from "./helpers/apply_card_mod";
+  apply_uix,
+  apply_uix_compatible,
+  UixStyle,
+} from "./helpers/apply_uix";
 import { compare_deep, merge_deep } from "./helpers/dict_functions";
 
 declare global {
   interface HTMLElementTagNameMap {
-    "card-mod": CardMod;
+    "uix-node": Uix;
   }
 }
 
-export class CardMod extends LitElement {
-  @property({ attribute: "card-mod-type", reflect: true }) type: string;
+export class Uix extends LitElement {
+  @property({ attribute: "uix-type", reflect: true }) type: string;
   variables: any;
   dynamicVariablesHaveChanged: boolean = false;
-  card_mod_children: Record<string, Array<Promise<CardMod>>> = {};
-  card_mod_parent?: CardMod = undefined;
-  card_mod_class?: string = undefined;
+  uix_children: Record<string, Array<Promise<Uix>>> = {};
+  uix_parent?: Uix = undefined;
+  uix_class?: string = undefined;
   classes: string[] = [];
 
   debug: boolean = false;
 
-  card_mod_input: CardModStyle;
-  _fixed_styles: Record<string, CardModStyle> = {};
+  uix_input: UixStyle;
+  _fixed_styles: Record<string, UixStyle> = {};
   _styles: string = "";
   _processStylesOnConnect: boolean = false;
   @property() _rendered_styles: string = "";
@@ -51,14 +51,14 @@ export class CardMod extends LitElement {
     }
     let stop = true;
     for (const m of mutations) {
-      if ((m.target as any).localName === "card-mod") return;
+      if ((m.target as any).localName === "uix-node") return;
       if (m.addedNodes.length)
         m.addedNodes.forEach((n) => {
-          if ((n as any).localName !== "card-mod") stop = false;
+          if ((n as any).localName !== "uix-node") stop = false;
         });
       if (m.removedNodes.length)
         m.removedNodes.forEach((n) => {
-          if ((n as any).localName !== "card-mod") stop = false;
+          if ((n as any).localName !== "uix-node") stop = false;
         });
     }
 
@@ -67,23 +67,23 @@ export class CardMod extends LitElement {
   });
 
   static get applyToElement() {
-    // This gets the compatibility wrapper for backwards compatibility with card-mod 3.3.
-    // The wrapper should be removed at earliest June 2024, or if card-mod 4.0 is released
-    return apply_card_mod_compatible;
+    // This gets the compatibility wrapper for backwards compatibility with uix 3.3.
+    // The wrapper should be removed at earliest June 2024, or if uix 4.0 is released
+    return apply_uix_compatible;
   }
 
   constructor() {
     super();
 
-    // cm_update is issued when themes are reloaded
-    document.addEventListener("cm_update", (ev: CustomEvent) => {
+    // uix_update is issued when themes are reloaded
+    document.addEventListener("uix_update", (ev: CustomEvent) => {
       // Don't process disconnected elements
       this.dynamicVariablesHaveChanged = ev.detail?.variablesChanged || false;
       if (!this.isConnected) {
         this._processStylesOnConnect = true;
         return;
       }
-      this._process_styles(this.card_mod_input);
+      this._process_styles(this.uix_input);
     });
   }
 
@@ -99,12 +99,12 @@ export class CardMod extends LitElement {
         ? ["#shadow-root of:", (this as any)?.parentNode?.host]
         : [this.parentElement ?? this.parentNode]),
       );
-      this._process_styles(this.card_mod_input);
+      this._process_styles(this.uix_input);
     } else {
       this.refresh();
     }
 
-    // Make sure the card-mod element is invisible
+    // Make sure the uix element is invisible
     this.setAttribute("slot", "none");
     this.style.display = "none";
   }
@@ -114,11 +114,11 @@ export class CardMod extends LitElement {
     this._disconnect();
   }
 
-  set styles(stl: CardModStyle) {
+  set styles(stl: UixStyle) {
     // Parsing styles is expensive, so only do it if things have actually changed
-    if (compare_deep(stl, this.card_mod_input)) return;
+    if (compare_deep(stl, this.uix_input)) return;
 
-    this.card_mod_input = stl;
+    this.uix_input = stl;
     if (!this.isConnected) {
       this._processStylesOnConnect = true;
       return;
@@ -126,7 +126,7 @@ export class CardMod extends LitElement {
     this._process_styles(stl);
   }
 
-  get styles(): CardModStyle {
+  get styles(): UixStyle {
     // Return only styles that apply to this element
     return this._styles;
   }
@@ -141,14 +141,14 @@ export class CardMod extends LitElement {
   }
 
   _debug(...msg) {
-    if (this.debug) console.log("CardMod Debug:", ...msg);
+    if (this.debug) console.log("UIX Debug:", ...msg);
   }
 
   private async _process_styles(stl) {
     let styles =
       typeof stl === "string" || stl === undefined ? { ".": stl ?? "" } : JSON.parse(JSON.stringify(stl));
 
-    // Merge card_mod styles with theme styles
+    // Merge uix styles with theme styles
     const theme_styles = await get_theme(this);
     merge_deep(styles, theme_styles);
 
@@ -162,7 +162,7 @@ export class CardMod extends LitElement {
     path: string,
     style,
     retries = 0
-  ): Promise<Array<Promise<CardMod>>> {
+  ): Promise<Array<Promise<Uix>>> {
     const parent = this.parentElement || this.parentNode;
     const elements = await selectTree(parent, path, true);
     if (!elements || !elements.length) {
@@ -178,15 +178,15 @@ export class CardMod extends LitElement {
     }
 
     return [...elements].map(async (ch) => {
-      const cm = await apply_card_mod(
+      const uix = await apply_uix(
         ch,
         `${this.type}-child`,
         { style, debug: this.debug },
         this.variables,
         false
       );
-      if (cm) cm.card_mod_parent = this;
-      return cm;
+      if (uix) uix.uix_parent = this;
+      return uix;
     });
   }
 
@@ -218,7 +218,7 @@ export class CardMod extends LitElement {
         styleChildren[key] = this._style_child(key, value).catch((e) => {
           if (e.message == "NoElements") {
             if (this.debug) {
-              console.groupCollapsed("card-mod found no elements");
+              console.groupCollapsed("UIX found no elements");
               console.info(`Looked for ${key}`);
               console.info(this);
               console.groupEnd();
@@ -228,7 +228,7 @@ export class CardMod extends LitElement {
           if (e.message == "Cancelled") {
             if (this.debug) {
               console.groupCollapsed(
-                "card-mod style_child cancelled while looking for elements"
+                "UIX style_child cancelled while looking for elements"
               );
               console.info(`Looked for ${key}`);
               console.info(this);
@@ -242,14 +242,14 @@ export class CardMod extends LitElement {
     }
 
     // Prune old child elements
-    for (const key in this.card_mod_children) {
+    for (const key in this.uix_children) {
       if (!styleChildren[key]) {
-        (await this.card_mod_children[key])?.forEach(
-          async (ch) => await ch.then((cm) => (cm.styles = "")).catch(() => {})
+        (await this.uix_children[key])?.forEach(
+          async (ch) => await ch.then((uix) => (uix.styles = "")).catch(() => {})
         );
       }
     }
-    this.card_mod_children = styleChildren;
+    this.uix_children = styleChildren;
     if (hasChildren) {
       this._observer.disconnect();
       const parentEl = this.parentElement ?? this.parentNode;
@@ -292,13 +292,13 @@ export class CardMod extends LitElement {
     this._styles = "";
     this.cancelStyleChild();
     await unbind_template(this._renderer);
-    this.card_mod_parent?.refresh?.();
+    this.uix_parent?.refresh?.();
   }
 
   private _style_rendered(result: string) {
     if (this._rendered_styles !== result) this._rendered_styles = result;
     // This event is listened for by icons
-    this.dispatchEvent(new Event("card-mod-update"));
+    this.dispatchEvent(new Event("uix-styles-update"));
   }
 
   createRenderRoot() {
@@ -314,25 +314,25 @@ export class CardMod extends LitElement {
   }
 }
 
-if (!customElements.get("card-mod")) {
-  customElements.define("card-mod", CardMod);
+if (!customElements.get("uix-node")) {
+  customElements.define("uix-node", Uix);
   console.groupCollapsed(
-    `%c💡 CARD-MOD-PLUS ${pjson.version} IS INSTALLED 💡`,
+    `%c💡 UIX ${pjson.version} IS INSTALLED 💡`,
     'color: white; background-color: #CE3226; padding: 2px 5px; font-weight: bold; border-radius: 5px;',
   );
-  console.log('Readme:', 'https://github.com/Lint-Free-Technology/card-mod-plus');
+  console.log('Documentation:', 'https://uix.lf.technology/');
   console.groupEnd();
-  window.dispatchEvent(new Event("card-mod-bootstrap"));
+  window.dispatchEvent(new Event("uix-bootstrap"));
 }
 (async () => {
   // Wait for scoped customElements registry to be set up
-  // and then redefine card-mod if necessary
-  // otherwise the customElements registry card-mod is defined in
-  // may get overwritten by the polyfill if card-mod is loaded as a module
+  // and then redefine uix-node if necessary
+  // otherwise the customElements registry uix-node is defined in
+  // may get overwritten by the polyfill if uix-node is loaded as a module
   while (customElements.get("home-assistant") === undefined)
     await new Promise((resolve) => window.setTimeout(resolve, 100));
 
-  if (!customElements.get("card-mod")) {
-    customElements.define("card-mod", CardMod);
+  if (!customElements.get("uix-node")) {
+    customElements.define("uix-node", Uix);
   }
 })();

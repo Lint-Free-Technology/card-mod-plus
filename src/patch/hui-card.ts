@@ -1,7 +1,7 @@
-import { patch_element, patch_object } from "../helpers/patch_function";
+import { patch_element } from "../helpers/patch_function";
 
-import { apply_card_mod } from "../helpers/apply_card_mod";
-import { ModdedElement } from "../helpers/apply_card_mod";
+import { apply_uix } from "../helpers/apply_uix";
+import { ModdedElement } from "../helpers/apply_uix";
 
 const EXCLUDED_CARDS = [
   "conditional",
@@ -9,7 +9,7 @@ const EXCLUDED_CARDS = [
 ];
 @patch_element("hui-card")
 class HuiCardPatch extends ModdedElement {
-  _cardMod = [];
+  _uix = [];
   _element: ModdedElement;
   config;
 
@@ -21,10 +21,10 @@ class HuiCardPatch extends ModdedElement {
     const config = element?.config || element?._config || this.config;
     const cls = `type-${config?.type?.replace?.(":", "-")}`;
 
-    await apply_card_mod(
+    await apply_uix(
       this._element,
       "card",
-      config?.card_mod,
+      config?.uix ?? config?.card_mod,
       { config },
       true,
       cls

@@ -1,4 +1,4 @@
-import { ModdedElement, apply_card_mod } from "../helpers/apply_card_mod";
+import { ModdedElement, apply_uix} from "../helpers/apply_uix";
 import { patch_element, patch_object } from "../helpers/patch_function";
 
 /*
@@ -44,15 +44,15 @@ class HuiGlanceCardPatch extends ModdedElement {
 
       // Add default styles into shadowRoot
       const styleTag =
-        el.querySelector("style[card-mod]") ?? document.createElement("style");
-      styleTag.setAttribute("card-mod", "");
+        el.querySelector("style[uix]") ?? document.createElement("style");
+      styleTag.setAttribute("uix", "");
       styleTag.innerHTML = ENTITY_STYLES;
       root.append(styleTag);
 
       // Thankfully the configuration data for the glance entity is added to the div for some reason
       // https://github.com/home-assistant/frontend/blob/8c39ed46a83e7e889c389af466c0fd1b07fbf6fd/src/panels/lovelace/cards/hui-glance-card.ts#L275
       const config = el["config"] ?? el["entityConfig"];
-      apply_card_mod(el as any, "glance", config?.card_mod, { config });
+      apply_uix(el as any, "glance", config?.uix ?? config?.card_mod, { config });
     }
   }
 }

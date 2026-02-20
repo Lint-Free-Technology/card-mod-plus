@@ -1,7 +1,7 @@
 import { hass, provideHass } from "../helpers/hass";
 
 export const ConnectionMixin = (SuperClass) => {
-  class CardModPlusConnection extends SuperClass {
+  class UixConnection extends SuperClass {
     public hass;
     public connection;
     public ready = false;
@@ -15,18 +15,18 @@ export const ConnectionMixin = (SuperClass) => {
     });
 
     LOG(...args) {
-      if ((window as any).card_mod_plus_log === undefined) return;
+      if ((window as any).uix_log === undefined) return;
       const dt = new Date();
       console.log(`${dt.toLocaleTimeString()}`, ...args);
 
       if (this._connected) {
         try {
           this.connection.sendMessage({
-            type: "card_mod_plus/log",
+            type: "uix/log",
             message: args[0],
           });
         } catch (err) {
-         console.log("Card-mod Plus: Error sending log:", err);
+         console.log("UIX: Error sending log:", err);
         }
       }
     }
@@ -45,14 +45,14 @@ export const ConnectionMixin = (SuperClass) => {
     // Component and frontend are mutually ready
     private onReady = () => {
       this.ready = true;
-      this.LOG("Integration ready: card_mod_plus loaded and update received");
-      this.fireBrowserEvent("card-mod-plus-ready");
+      this.LOG("Integration ready: UIX loaded and update received");
+      this.fireBrowserEvent("uix-ready");
       this.userReady()
         .then(() => {
           this.onUserReady();
         })
         .catch((err) => {
-          console.log(`Card-mod Plus: ${err}. User Frontend settings have not been applied`);
+          console.log(`UIX: ${err}. User Frontend settings have not been applied`);
         });
     }
 
@@ -67,7 +67,7 @@ export const ConnectionMixin = (SuperClass) => {
       this.ready = false;
       this._connected = false;
       this.LOG("WebSocket disconnected");
-      this.fireBrowserEvent("card-mod-plus-disconnected");
+      this.fireBrowserEvent("uix-disconnected");
     }
 
     private async userReady() {
@@ -85,7 +85,7 @@ export const ConnectionMixin = (SuperClass) => {
 
     private onUserReady = () => {
       this.LOG("Hass user data ready");
-      this.fireBrowserEvent("card-mod-plus-user-ready");
+      this.fireBrowserEvent("uix-user-ready");
     }
 
     // Handle incoming message
@@ -97,7 +97,7 @@ export const ConnectionMixin = (SuperClass) => {
       // Handle messages
       if (msg.command) {
         this.LOG("Command:", msg);
-        this.fireBrowserEvent(`command-${msg.command}`, msg);
+        this.fireBrowserEvent(`uix-command-${msg.command}`, msg);
       } else if (msg.result) {
         this.update_config(msg.result);
       }
@@ -117,7 +117,7 @@ export const ConnectionMixin = (SuperClass) => {
       if (!this.ready) {
         this.onReady();
       }
-      this.fireBrowserEvent("card-mod-plus-config-update");
+      this.fireBrowserEvent("uix-config-update");
 
       // future update handling can be added here
       // if (update) this.sendUpdate({});
@@ -127,24 +127,24 @@ export const ConnectionMixin = (SuperClass) => {
       const conn = (await hass()).connection;
       this.connection = conn;
 
-      const connectCardModPlusComponent = () => {
-        this.LOG("Subscribing to card_mod_plus/connect events");
+      const connectUixComponent = () => {
+        this.LOG("Subscribing to uix/connect events");
         conn.subscribeMessage((msg) => this.incoming_message(msg), {
-          type: "card_mod_plus/connect",
+          type: "uix/connect",
           browserID: this.browserID,
         }).catch((err) => {
-          console.error("Card-mod Plus: Error connecting");
+          console.error("UIX: Error connecting");
         });
       };
 
       // Initial connect component subscription
-      connectCardModPlusComponent();
-      // Observe `component_loaded` to track when `card_mod_plus` is added after Home Assistant startup, such as during a restart or update. 
+      connectUixComponent();
+      // Observe `component_loaded` to track when `uix` is added after Home Assistant startup, such as during a restart or update. 
       // This ensures the connection is re-established and the component receives updates.
       conn.subscribeEvents((haEvent) => {
-        if (haEvent.data?.component === "card_mod_plus") {
-          this.LOG("Detected card_mod_plus component load");
-          connectCardModPlusComponent();
+        if (haEvent.data?.component === "uix") {
+          this.LOG("Detected uix component load");
+          connectUixComponent();
         }
       }, "component_loaded");
 
@@ -180,5 +180,5 @@ export const ConnectionMixin = (SuperClass) => {
     }
   }
 
-  return CardModPlusConnection;
+  return UixConnection;
 };

@@ -1,9 +1,10 @@
 import pjson from "../../package.json";
 import { selectTree } from "./selecttree";
 
-(window as any).cardMod_patch_state = (window as any).cardMod_patch_state || {};
+(window as any).uix_patch_state = (window as any).uix_patch_state || {};
 
-const patchState: Record<string, {patched: boolean, version: string}> = (window as any).cardMod_patch_state;
+const patchState: Record<string, {patched: boolean, version: string}> = (window as any).uix_patch_state;
+const cardModPatchState: Record<string, {patched: boolean, version: string}> = (window as any).card_mod_patch_state;
 
 const patch_method = function (obj, method, override) {
   if (method === "constructor") return;
@@ -51,7 +52,8 @@ export function patch_element(element, afterwards?) {
   return function patched(constructor) {
     const key = typeof element === "string" ? element : element.name;
     const patched = patchState[key]?.patched ?? patchState[key] ?? false;
-    if (patched) {
+    const cardModPatched = cardModPatchState?.[key]?.patched ?? cardModPatchState?.[key] ?? false;
+    if (patched || cardModPatched) {
       log_patch_warning(key);
       return;
     }
@@ -61,11 +63,11 @@ export function patch_element(element, afterwards?) {
 }
 
 function log_patch_warning(key) {
-  if ((window as any).cm_patch_warning) return;
-  (window as any).cm_patch_warning = true;
-  const message = `CARD-MOD-PLUS (${pjson.version}): ${key} already patched by ${patchState[key]?.version || "unknown version"}!`;
+  if ((window as any).uix_patch_warning) return;
+  (window as any).uix_patch_warning = true;
+  const message = `UIX (${pjson.version}): ${key} already patched by ${patchState[key]?.version || (cardModPatchState[key] ? `Card-mod (${cardModPatchState[key]?.version || "unknown Card-mod version"})` : "unknown version")}!`;
   const details = [
-    "Make sure you are using Card-mod Plus and not the original Card-mod, as both cannot be used at the same time.",
+    "Make sure you are using the latest version of UIX.",
   ];
 
   selectTree(document.body, "home-assistant").then((haEl) => {
@@ -81,7 +83,7 @@ function log_patch_warning(key) {
         "system_log",
         "write",
         {
-          logger: `card-mod-plus.${pjson.version}`,
+          logger: `uix.${pjson.version}`,
           level: "warning",
           message: `${message} ${details.join(" ")} ${info}`,
         },
@@ -89,7 +91,7 @@ function log_patch_warning(key) {
         false
       ).catch(error => {
         console.error(
-          "CARD-MOD-PLUS: Failed to create duplicate patch warning notification",
+          "UIX: Failed to create duplicate patch warning notification",
           error
         );
       });

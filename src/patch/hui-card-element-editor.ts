@@ -2,35 +2,40 @@ import { LitElement } from "lit";
 import { patch_element, patch_object } from "../helpers/patch_function";
 
 class ConfigElementPatch extends LitElement {
-  _cardModData?;
+  _uixData?;
 
   setConfig(_orig, config, ...rest) {
     const newConfig = JSON.parse(JSON.stringify(config));
 
-    // Save card_mod config
-    this._cardModData = {
-      card: newConfig.card_mod,
+    // Save uix config
+    this._uixData = {
+      uix: undefined,
+      card_mod: undefined,
       entities: [],
     };
+    if (newConfig.uix) {
+      this._uixData.uix = newConfig.uix;
+    } else if (newConfig.card_mod) {
+      this._uixData.card_mod = newConfig.card_mod;
+    }
+    delete newConfig.uix;
     delete newConfig.card_mod;
 
-    // Save card_mod config for individual entities
+    // Save uix config for individual entities
     if (Array.isArray(newConfig.entities)) {
       for (const [i, e] of newConfig.entities?.entries?.()) {
-        this._cardModData.entities[i] = e.card_mod;
+        this._uixData.entities[i] = { uix: undefined, card_mod: undefined };
+        if (e.uix) {
+          this._uixData.entities[i].uix = e.uix;
+        } else if (e.card_mod) {
+          this._uixData.entities[i].card_mod = e.card_mod;
+        }
+        delete e.uix;
         delete e.card_mod;
       }
     }
 
     _orig(newConfig, ...rest);
-
-    // Restore card_mod config for entities
-    if (Array.isArray(newConfig.entities)) {
-      for (const [i, e] of newConfig.entities?.entries?.()) {
-        if (this._cardModData?.entities[i])
-          e.card_mod = this._cardModData.entities[i];
-      }
-    }
   }
 }
 
@@ -46,10 +51,23 @@ class HuiCardElementEditorPatch extends LitElement {
     return retval;
   }
 
-  _handleUIConfigChanged(_orig, ev, ...rest) {
-    const cmData = this._configElement?._cardModData;
-    if (cmData) {
-      ev.detail.config.card_mod = cmData.card;
+  _handleConfigChanged(_orig, ev, ...rest) {
+    const uixData = this._configElement?._uixData;
+    if (uixData && (uixData.uix)) {
+      ev.detail.config.uix = uixData.card;
+    }
+    if (uixData && uixData.card_mod) {
+      ev.detail.config.card_mod = uixData.card_mod;
+    }
+    if (uixData && Array.isArray(uixData.entities)) {
+      for (const [i, e] of uixData.entities.entries()) {
+        if (e.uix) {
+          ev.detail.config.entities[i].uix = e.uix;
+        }
+        if (e.card_mod) {
+          ev.detail.config.entities[i].card_mod = e.card_mod;
+        }
+      }
     }
 
     _orig(ev, ...rest);
@@ -58,27 +76,27 @@ class HuiCardElementEditorPatch extends LitElement {
 
 @patch_element("hui-dialog-edit-card")
 class HuiDialogEditCardPatch extends LitElement {
-  _cardModIcon?;
+  _uixIcon?;
   _cardConfig?;
 
   updated(_orig, ...args) {
     _orig?.(...args);
-    if (!this._cardModIcon) {
-      this._cardModIcon = document.createElement("ha-icon");
-      this._cardModIcon.icon = "mdi:brush";
+    if (!this._uixIcon) {
+      this._uixIcon = document.createElement("ha-icon");
+      this._uixIcon.icon = "mdi:brush";
     }
 
     const button = this.shadowRoot.querySelector(
       "ha-button[slot=secondaryAction]"
     );
     if (!button) return;
-    button.appendChild(this._cardModIcon);
+    button.appendChild(this._uixIcon);
     if (
-      JSON.stringify(this._cardConfig)?.includes("card_mod")
+      JSON.stringify(this._cardConfig)?.includes("uix") || JSON.stringify(this._cardConfig)?.includes("card_mod")
     ) {
-      this._cardModIcon.style.visibility = "visible";
+      this._uixIcon.style.visibility = "visible";
     } else {
-      this._cardModIcon.style.visibility = "hidden";
+      this._uixIcon.style.visibility = "hidden";
     }
   }
 }

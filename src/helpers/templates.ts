@@ -23,11 +23,11 @@ interface RenderTemplateError {
   level: "ERROR" | "WARNING";
 }
 
-(window as any).cardMod_template_cache =
-  (window as any).cardMod_template_cache || {};
+(window as any).uix_template_cache =
+  (window as any).uix_template_cache || {};
 
 const cachedTemplates: Record<string, CachedTemplate> = (window as any)
-  .cardMod_template_cache;
+  .uix_template_cache;
 
 function template_updated(
   key: string,
@@ -41,7 +41,7 @@ function template_updated(
     cache.error = result as unknown as RenderTemplateError;
     cache.value = "";
     if (cache.debug) {
-      console.groupCollapsed(`CardMod: Template ${cache.error.level}`);
+      console.groupCollapsed(`UIX: Template ${cache.error.level}`);
       console.log( { 
         template: cache.template, 
         variables: cache.variables, 
@@ -53,7 +53,7 @@ function template_updated(
   } else {
     cache.value = result.result;
     if (cache.debug) {
-      console.groupCollapsed("CardMod: Template updated");
+      console.groupCollapsed("UIX: Template updated");
       console.log( { 
         template: cache.template, 
         variables: cache.variables, 
@@ -94,9 +94,9 @@ export async function bind_template(
     unbind_template(callback);
     callback("");
 
-    if (template.includes("card_mod.debug")) {
+    if (template.includes("uix.debug") || template.includes("card_mod.debug")) {
       debug = true;
-      console.groupCollapsed("CardMod: Binding template");
+      console.groupCollapsed("UIX: Binding template");
       console.log( { 
         template, 
         variables
@@ -122,7 +122,7 @@ export async function bind_template(
     };
   } else {
     if (cache.debug) {
-      console.groupCollapsed("CardMod: Reusing template");
+      console.groupCollapsed("UIX: Reusing template");
       console.log( { 
         template: cache.template, 
         variables: cache.variables, 
@@ -148,7 +148,7 @@ export async function unbind_template(
       if (cache.callbacks.size == 0) {
         if (cache.debug) {
           console.groupCollapsed(
-            "CardMod: Template unbound and will be unsubscribed after cooldown"
+            "UIX: Template unbound and will be unsubscribed after cooldown"
           );
           console.log( { 
             template: cache.template, 
@@ -174,7 +174,7 @@ async function unsubscribe_template(key: string) {
     clearTimeout(cache.cooldownTimeoutID);
   }
   if (cache.debug) {
-    console.groupCollapsed("CardMod: Unsubscribing template after cooldown");
+    console.groupCollapsed("UIX: Unsubscribing template after cooldown");
     console.log( { 
       template: cache.template, 
       variables: cache.variables

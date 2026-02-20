@@ -1,6 +1,6 @@
 import { patch_element, patch_object } from "../helpers/patch_function";
-import { apply_card_mod } from "../helpers/apply_card_mod";
-import { ModdedElement } from "../helpers/apply_card_mod";
+import { apply_uix } from "../helpers/apply_uix";
+import { ModdedElement } from "../helpers/apply_uix";
 
 /*
 Patch ha-assist-chip on first update
@@ -13,10 +13,10 @@ class HaAssistChipPatch extends ModdedElement {
   async firstUpdated(_orig, ...args) {
     await _orig?.(...args);
 
-    await apply_card_mod(
+    await apply_uix(
       this,
       "assist-chip",
-      this.config?.card_mod,
+      this.config?.uix ?? this.config?.card_mod,
       { config: this.config },
       true,
       "type-assist-chip"

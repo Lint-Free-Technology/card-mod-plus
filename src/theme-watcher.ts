@@ -2,7 +2,7 @@ import { hass } from "./helpers/hass";
 import { Unpromise } from "@watchable/unpromise";
 
 function refresh_theme() {
-  document.dispatchEvent(new Event("cm_update"));
+  document.dispatchEvent(new Event("uix_update"));
 }
 
 const bases = [
@@ -59,7 +59,7 @@ export function themesReady(): Promise<void> {
           settled = true;
           clearInterval(id);
           reject(
-            new Error("themesReady: Timeout waiting for themes to become ready")
+            new Error("UIX: themesReady: Timeout waiting for themes to become ready")
           );
         }
       }, 30000); // 30 seconds

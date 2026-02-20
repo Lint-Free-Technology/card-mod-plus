@@ -1,0 +1,12 @@
+{
+    "config": {
+        "create_entry": {
+            "refresh_message": "You need to refresh the page after adding UIX for the Frontend resource to load. Click finish and then refresh the page."
+        },
+        "abort": {
+            "single_instance_allowed": "Only a single instance of UIX can be added.",
+            "old_frontend_script_resource": "Conflicting Frontend script resource {resource} is registered as a Dashboard resource. Please remove it before adding UIX.",
+            "old_frontend_script_extra_module": "Conflicting Frontend script resource {resource} is registered as an extra module. Please remove it before adding UIX."
+        }
+    }
+}

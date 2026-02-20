@@ -1,0 +1,20 @@
+{
+  "domain": "uix",
+  "name": "UI eXtension for Home Assistant",
+  "documentation": "https://uix.lf.technology",
+  "issue_tracker": "https://github.com/Lint-Free-Technology/uix/issues",
+  "codeowners": [
+    "@dcapslock",
+    "@Lint-Free-Technology"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "websocket_api",
+    "http",
+    "frontend",
+    "lovelace"
+  ],
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "version": "5.0.0-beta.2"
+}

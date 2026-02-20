@@ -1,11 +1,11 @@
 from homeassistant.core import HomeAssistant
 
-from .const import OLD_FRONTEND_SCRIPT_URL
+from .const import CARD_MOD_FRONTEND_SCRIPT_URL
 
 DATA_EXTRA_MODULE_URL = "frontend_extra_module_url"
 
-async def check_old_frontend_script_resource(hass: HomeAssistant) -> bool:
-    """Check if the old frontend script is registered as a resource."""
+async def check_card_mod_frontend_script_resource(hass: HomeAssistant) -> bool:
+    """Check if the card_mod frontend script is registered as a resource."""
 
     resources = hass.data["lovelace"].resources
     if resources:
@@ -14,17 +14,17 @@ async def check_old_frontend_script_resource(hass: HomeAssistant) -> bool:
             resources.loaded = True
 
         for r in resources.async_items():
-            if OLD_FRONTEND_SCRIPT_URL in r["url"]:
+            if CARD_MOD_FRONTEND_SCRIPT_URL in r["url"]:
                 return True
             
     return False
 
-async def check_old_frontend_script_extra_module(hass: HomeAssistant) -> bool:
-    """Check if the old frontend script is registered as an extra module."""
+async def check_card_mod_frontend_script_extra_module(hass: HomeAssistant) -> bool:
+    """Check if the card_mod frontend script is registered as an extra module."""
 
     extra_modules = hass.data[DATA_EXTRA_MODULE_URL].urls
     for extra_module_url in extra_modules:
-        if OLD_FRONTEND_SCRIPT_URL in extra_module_url:
+        if CARD_MOD_FRONTEND_SCRIPT_URL in extra_module_url:
             return True
 
     return False

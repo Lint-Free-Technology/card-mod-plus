@@ -1,4 +1,4 @@
-import { ModdedElement, apply_card_mod } from "../helpers/apply_card_mod";
+import { ModdedElement, apply_uix } from "../helpers/apply_uix";
 import { patch_element, patch_object } from "../helpers/patch_function";
 import { await_element } from "../helpers/selecttree";
 
@@ -17,7 +17,7 @@ class PictureElementsCardPatch extends ModdedElement {
         patch_object(el, ModdedElement);
         const config = (this as any)._config.elements[i];
         const cls = `type-${config?.type?.replace?.(":", "-")}`;
-        apply_card_mod(el, "element", config?.card_mod, { config }, true, cls);
+        apply_uix(el, "element", config?.uix ?? config?.card_mod, { config }, true, cls);
       }
     }
     Promise.all([this.updateComplete]).then(() => apply());
@@ -38,7 +38,7 @@ class HuiConditionalElementPatch extends ModdedElement {
         patch_object(el, ModdedElement);
         const config = (this as any)._config.elements[i];
         const cls = `type-${config?.type?.replace?.(":", "-")}`;
-        apply_card_mod(el, "element", config?.card_mod, { config }, true, cls);
+        apply_uix(el, "element", config?.uix ?? config?.card_mod, { config }, true, cls);
       }
     }
     Promise.all([this.updateComplete]).then(() => apply());

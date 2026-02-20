@@ -1,17 +1,17 @@
 import { patch_element, patch_object } from "../helpers/patch_function";
-import { apply_card_mod } from "../helpers/apply_card_mod";
-import { ModdedElement } from "../helpers/apply_card_mod";
+import { apply_uix } from "../helpers/apply_uix";
+import { ModdedElement } from "../helpers/apply_uix";
 
 /*
 Patch the ha-card element to on first update:
 - if it's parent is a hui-card, do nothing (as that is already handled in hui-card patch)
 - try to find the config parameter of it's parent element
-- Apply card_mod styles according to that config
+- Apply uix styles according to that config
 */
 
 @patch_element("ha-card")
 class HaCardPatch extends ModdedElement {
-  _cardMod = [];
+  _uix = [];
   async firstUpdated(_orig, ...args) {
     await _orig?.(...args);
 
@@ -22,10 +22,10 @@ class HaCardPatch extends ModdedElement {
     if (!config) return;
 
     const cls = `type-${config?.type?.replace?.(":", "-")}`;
-    await apply_card_mod(
+    await apply_uix(
       this,
       "card",
-      config?.card_mod,
+      config?.uix ?? config?.card_mod,
       { config },
       false,
       cls
@@ -35,7 +35,7 @@ class HaCardPatch extends ModdedElement {
     if (!parent) return;
 
     patch_object(parent, ModdedElement);
-    parent._cardMod = this._cardMod;
+    parent._uix = this._uix;
   }
 }
 

@@ -1,10 +1,10 @@
-import { ModdedElement, apply_card_mod } from "../helpers/apply_card_mod";
+import { ModdedElement, apply_uix } from "../helpers/apply_uix";
 import { patch_element } from "../helpers/patch_function";
 
 /*
 Patch ha-drawer for theme styling
 
-There is no style passed to apply_card_mod here, everything comes only from themes.
+There is no style passed to apply_uix here, everything comes only from themes.
 
 */
 
@@ -12,6 +12,6 @@ There is no style passed to apply_card_mod here, everything comes only from them
 class HaDrawerPatch extends ModdedElement {
   updated(_orig, ...args) {
     _orig?.(...args);
-    apply_card_mod(this, "drawer", undefined, {}, true);
+    apply_uix(this, "drawer", undefined, {}, true);
   }
 }

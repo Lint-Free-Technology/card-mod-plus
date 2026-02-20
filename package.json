@@ -1,16 +1,16 @@
 {
-  "name": "card-mod",
+  "name": "uix",
   "private": true,
   "version": "5.0.0-beta.2",
-  "description": "",
+  "description": "UIX - UI eXtension for Home Assistant",
   "scripts": {
     "build": "rollup -c",
-    "update-manifest-version": "node -e \"const pkg = require('./package.json'); const manifest = require('./custom_components/card_mod_plus/manifest.json'); manifest.version = pkg.version; require('fs').writeFileSync('./custom_components/card_mod_plus/manifest.json', JSON.stringify(manifest, null, 2) + '\\n');\"",
+    "update-manifest-version": "node -e \"const pkg = require('./package.json'); const manifest = require('./custom_components/uix/manifest.json'); manifest.version = pkg.version; require('fs').writeFileSync('./custom_components/uix/manifest.json', JSON.stringify(manifest, null, 2) + '\\n');\"",
     "prebuild": "npm run update-manifest-version",
     "watch": "rollup -c --watch"
   },
   "keywords": [],
-  "author": "Thomas Lovén",
+  "author": "Darryn Capes-Davis",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.23.6",

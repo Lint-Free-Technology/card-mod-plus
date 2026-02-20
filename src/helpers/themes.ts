@@ -1,7 +1,7 @@
 import { hass } from "./hass";
 import { yaml2json } from "./yaml2json";
-import { CardMod } from "../card-mod";
-import { CardModStyle } from "./apply_card_mod";
+import { Uix } from "../uix";
+import { UixStyle } from "./apply_uix";
 import { themesReady } from "../theme-watcher";
 
 function cssValueIsTrue(v: string): boolean {
@@ -10,26 +10,26 @@ function cssValueIsTrue(v: string): boolean {
   return t === "true" || t === "1" || t === "yes" || t === "on";
 }
 
-export async function get_theme(root: CardMod): Promise<CardModStyle> {
+export async function get_theme(root: Uix): Promise<UixStyle> {
   if (!root.type) return null;
 
   await themesReady();
 
   const el = root.parentElement ? root.parentElement : root;
   const cs = window.getComputedStyle(el);
-  const theme = cs.getPropertyValue("--card-mod-theme");
+  const theme = cs.getPropertyPriority("--uix-theme") || cs.getPropertyValue("--card-mod-theme");
 
   // Determine debug flag from CSS variables.
   // Checked patterns:
-  //  - --card-mod-<type>-debug
-  //  - --card-mod-<type>-<class>-debug
+  //  - --uix-<type>-debug
+  //  - --uix-<type>-<class>-debug
   let debug = false;
 
-  const typeDebug = cs.getPropertyValue(`--card-mod-${root.type}-debug`);
+  const typeDebug = cs.getPropertyValue(`--uix-${root.type}-debug`) || cs.getPropertyValue(`--card-mod-${root.type}-debug`);
   if (cssValueIsTrue(typeDebug)) debug = true;
 
   for (const cls of root.classes) {
-    const debugVar = cs.getPropertyValue(`--card-mod-${root.type}-${cls}-debug`);
+    const debugVar = cs.getPropertyValue(`--uix-${root.type}-${cls}-debug`) || cs.getPropertyValue(`--card-mod-${root.type}-${cls}-debug`);
     if (cssValueIsTrue(debugVar)) {
       debug = true;
       break;
@@ -38,15 +38,19 @@ export async function get_theme(root: CardMod): Promise<CardModStyle> {
 
   root.debug ||= !!debug;
 
-  root.debug && console.log("CardMod Debug: Theme:", theme);
+  root.debug && console.log("UIX Debug: Theme:", theme);
 
   const hs = await hass();
   if (!hs) return {};
   const themes = hs?.themes.themes ?? {};
   if (!themes[theme]) return {};
 
-  if (themes[theme][`card-mod-${root.type}-yaml`]) {
+  if (themes[theme][`uix-${root.type}-yaml`]) {
+    return yaml2json(themes[theme][`uix-${root.type}-yaml`]);
+  } else if (themes[theme][`card-mod-${root.type}-yaml`]) {
     return yaml2json(themes[theme][`card-mod-${root.type}-yaml`]);
+  } else if (themes[theme][`uix-${root.type}`]) {
+    return { ".": themes[theme][`uix-${root.type}`] };
   } else if (themes[theme][`card-mod-${root.type}`]) {
     return { ".": themes[theme][`card-mod-${root.type}`] };
   } else {

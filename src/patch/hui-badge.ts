@@ -1,7 +1,5 @@
-import { patch_element, patch_object } from "../helpers/patch_function";
-
-import { apply_card_mod } from "../helpers/apply_card_mod";
-import { ModdedElement } from "../helpers/apply_card_mod";
+import { patch_element } from "../helpers/patch_function";
+import { ModdedElement, apply_uix } from "../helpers/apply_uix";
 
 const EXCLUDED_BADGES = [
   "entity-filter",
@@ -12,30 +10,30 @@ class HuiBadgePatch extends ModdedElement {
   _element: ModdedElement;
   config;
 
-  async _add_card_mod() {
+  async _add_uix() {
     if (!this._element) return;
     if (EXCLUDED_BADGES.includes(this.config?.type?.toLowerCase())) return;
     
     const cls = `type-${this.config?.type?.replace?.(":", "-")}`;
 
-    await apply_card_mod(
+    await apply_uix(
       this._element,
       "badge",
-      this.config.card_mod,
+      this.config?.uix ?? this.config?.card_mod,
       { config: this.config },
       true,
       cls
     );
-    this._cardMod = this._element._cardMod;
+    this._uix = this._element._uix;
   }
 
   _loadElement(_orig, ...args) {
     _orig?.(...args);
-    this._add_card_mod();
+    this._add_uix();
   }
 
   _updateElement(_orig, ...args) {
     _orig?.(...args);
-    this._add_card_mod();
+    this._add_uix();
   }
 }

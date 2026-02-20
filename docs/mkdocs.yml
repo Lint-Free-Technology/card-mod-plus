@@ -1,4 +1,5 @@
 site_name: UI eXtension Documentation
+site_url: https://uix.lf.technology
 docs_dir: source
 theme:
   name: material
@@ -27,6 +28,7 @@ theme:
         name: Switch to light mode
   logo: assets/images/icon.png
   favicon: assets/images/icon.png
+  custom_dir: overrides
 extra:
   generator: false
 plugins:

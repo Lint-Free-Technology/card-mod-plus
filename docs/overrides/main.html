@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+    <meta property="og:image" content="/assets/images/mixed.png" />
+    {% if page and page.meta and page.meta.description %}
+        <meta property="og:description" content="{{ page.meta.description }}" />
+    {% else %}
+    <meta property="og:description" content="💡 UI eXtension 💡 Add CSS styles to (almost) any part of the Home Assistant UI." />
+    {% endif %}
+{% endblock %}

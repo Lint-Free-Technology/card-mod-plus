@@ -23,3 +23,6 @@ No, being an integration, UI eXtension manages its resource URLs directly. You d
 
 UI eXtension will show a toast message when it detects that a reload is needed to clear caches, with a convenient `Reload` button.
 
+## How do I uninstall UI eXtension?
+
+Uninstallation of UI eXtensions is a two step process. First, remove the service entry in Devices & services. Next uninstall the integration either HACS or manually removing the `uix` folder from `custom_components` directory.

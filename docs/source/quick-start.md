@@ -1,3 +1,7 @@
+---
+title: Quick Start
+description: Get started using UI eXtension for Home Assistant.
+---
 # Quick Start
 
 ## Installation

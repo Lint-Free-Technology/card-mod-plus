@@ -8,15 +8,15 @@ body:
       label: My Home Assistant Version
       description: You can view your Home Assistant Version in _Settings > About_
       placeholder: |
-        Core: 2025.10.3
-        Frontend: 20251001.2
-        Card-mod: 3.4.5
+        Core: 2026.3.0
+        Frontend: 20260128.0
+        UIX: 5.0.0
     validations:
       required: true
   - type: dropdown
     id: install_method
     attributes:
-      label: My card-mod installation method
+      label: My UIX installation method
       multiple: false
       options:
         - HACS

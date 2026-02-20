@@ -2,6 +2,7 @@
 
 {% block extrahead %}
     <meta property="og:image" content="/assets/images/mixed.png" />
+    <meta property="og:type" content="object" />
     {% if page and page.meta and page.meta.description %}
         <meta property="og:description" content="{{ page.meta.description }}" />
     {% else %}

@@ -1,4 +1,7 @@
-# About UI eXtension for Home Assistant
+---
+title: About
+---
+# UI eXtension for Home Assistant
 
 ![light-logo-icon](./assets/images/mixed.png)
 

@@ -17,6 +17,7 @@ theme:
     - content.code.annotation
     - content.code.copy
     - content.action.edit
+    - content.action.view
   palette:
     - schema: default
       toggle:
@@ -50,7 +51,7 @@ nav:
   - About: 'index.md'
   - Quick Start: 'quick-start.md'
   - Using UIX:
-      - using/overview.md
+      - using/index.md
       - using/cards.md
       - using/entities.md
       - using/icons.md
@@ -58,9 +59,11 @@ nav:
       - using/themes.md
       - using/other.md
   - Debugging UIX:
+      - debugging/index.md
       - debugging/cards.md
       - debugging/templates.md
   - UIX Concepts:
+      - concepts/index.md
       - concepts/dom.md
       - concepts/application.md
   - Developers: 'developers.md'

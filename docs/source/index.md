@@ -14,9 +14,9 @@ UI eXtension (UIX) comes from the heritage of [card-mod](https://github.com/thom
 
 ## 🚀 Quick Start
 
-Go to [Quick Start](/quick-start) for installation instructions and a short guide on making your first UIX.
+Go to [Quick Start](./quick-start.md) for installation instructions and a short guide on making your first UIX.
 
 ## ➡️ Next up
 
-- [Using UIX](/using-uix)
+- [Using UIX](./using/overview.md)
 - [FAQ](/faq)

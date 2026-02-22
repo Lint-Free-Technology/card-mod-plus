@@ -1,3 +1,9 @@
+## [5.0.0-beta.5](https://github.com/Lint-Free-Technology/uix/compare/v5.0.0-beta.4...v5.0.0-beta.5) (2026-02-22)
+
+### ⭐ New Features
+
+* Apply UIX to ha-panel-profile ([6bd54f7](https://github.com/Lint-Free-Technology/uix/commit/6bd54f7b9c9d479f8bf845eed9b670a7fcaa9b5e))
+
 ## [5.0.0-beta.4](https://github.com/Lint-Free-Technology/uix/compare/v5.0.0-beta.3...v5.0.0-beta.4) (2026-02-21)
 
 ### 🐞 Bug Fixes

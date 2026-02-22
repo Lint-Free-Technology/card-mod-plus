@@ -1,3 +1,11 @@
+<!-- markdownlint-configure-file { "MD024": false } -->
+<!-- markdownlint-configure-file { "MD041": false } -->
+## [5.0.0-beta.5](https://github.com/Lint-Free-Technology/uix/compare/v5.0.0-beta.4...v5.0.0-beta.5) (2026-02-22)
+
+### ⭐ New Features
+
+* Apply UIX to ha-panel-profile ([6bd54f7](https://github.com/Lint-Free-Technology/uix/commit/6bd54f7b9c9d479f8bf845eed9b670a7fcaa9b5e))
+
 ## [5.0.0-beta.4](https://github.com/Lint-Free-Technology/uix/compare/v5.0.0-beta.3...v5.0.0-beta.4) (2026-02-21)
 
 ### 🐞 Bug Fixes
@@ -13,17 +21,10 @@
 
 ### ⚙️ Miscellaneous
 
-* Migrate to Card-mod Plus as integration ([27346b3](https://github.com/Lint-Free-Technology/uix/commit/27346b3c03b3573f9a2a6d06050574026c59e69f))
 * Migrate to UIX ([b6c0672](https://github.com/Lint-Free-Technology/uix/commit/b6c0672f4a134429c32d6484e059506cbda9ab14))
 
-## [5.0.0-beta.2](https://github.com/Lint-Free-Technology/card-mod-plus/compare/v5.0.0-beta.1...v5.0.0-beta.2) (2026-02-18)
+## [5.0.0-beta.2](https://github.com/Lint-Free-Technology/uix/compare/v5.0.0-beta.1...v5.0.0-beta.2) (2026-02-18)
 
 ### 🐞 Bug Fixes
 
-* Add ha-adaptive-dialog to dialogs where card-mod is added. Remove old ha-wa-dialog and ha-md-dialog. ([6f186a8](https://github.com/Lint-Free-Technology/card-mod-plus/commit/6f186a8c792e274f26bf505b11ffc70365a265b3))
-
-## [5.0.0-beta.1](https://github.com/Lint-Free-Technology/lovelace-card-mod/compare/v4.2.1...v5.0.0-beta.1) (2026-02-13)
-
-### ⭐ New Features
-
-* **major:** Major version bump for LFT fork ([9d283e0](https://github.com/Lint-Free-Technology/lovelace-card-mod/commit/9d283e01fb9c5ac0addbd57ce4a7e93f84dcc0aa))
+* Add ha-adaptive-dialog to dialogs where UIX is added. Remove old ha-wa-dialog and ha-md-dialog. ([6f186a8](https://github.com/Lint-Free-Technology/uix/commit/6f186a8c792e274f26bf505b11ffc70365a265b3))

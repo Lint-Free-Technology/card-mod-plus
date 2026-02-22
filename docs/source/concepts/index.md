@@ -1,5 +1,5 @@
 ---
-description: Learn about UIX concepts such as DOM navigation and how UIX patches and applies to UI elements in Home Assistant.
+description: Learn about UI eXtension concepts such as DOM navigation and how UIX patches and applies to UI elements in Home Assistant.
 ---
 # UIX Concepts
 

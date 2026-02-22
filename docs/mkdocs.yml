@@ -62,11 +62,15 @@ nav:
       - debugging/index.md
       - debugging/cards.md
       - debugging/templates.md
+      - debugging/cache.md
   - UIX Concepts:
       - concepts/index.md
       - concepts/dom.md
       - concepts/application.md
-  - Developers: 'developers.md'
+  - Developers:
+      - developers/index.md
+      - developers/cards.md
+      - developers/themes.md
   - Contributing: 'contributing.md'
   - UIX Guides: 'guides.md'
   - FAQ: 'faq.md'

@@ -1,5 +1,5 @@
 ---
-description: UIX information for developers of custom cards
+description: Information for developers of custom cards
 ---
 # Developers - Custom cards
 

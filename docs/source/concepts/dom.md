@@ -1,5 +1,5 @@
 ---
-description: Learn how to review the Home Assistant DOM to become a UIX expert.
+description: Learn how to review the Home Assistant DOM to become a UI eXtension expert.
 ---
 # DOM navigation
 

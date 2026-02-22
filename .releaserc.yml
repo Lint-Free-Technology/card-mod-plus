@@ -21,7 +21,6 @@ plugins:
         - custom_components/uix/uix.js
       message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
   - - "@semantic-release/github"
-    - successCommentCondition: "<% return !issue.pull_request || (issue.pull_request && issue.author_association !== 'OWNER'); %>"
 
 preset: conventionalcommits
 presetConfig:

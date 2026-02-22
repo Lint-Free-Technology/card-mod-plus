@@ -15,5 +15,5 @@
   ],
   "integration_type": "service",
   "iot_class": "local_push",
-  "version": "5.0.0-beta.5"
+  "version": "5.0.0-beta.6"
 }

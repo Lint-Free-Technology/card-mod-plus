@@ -1,3 +1,9 @@
+## [5.0.0-beta.6](https://github.com/Lint-Free-Technology/uix/compare/v5.0.0-beta.5...v5.0.0-beta.6) (2026-02-22)
+
+### 🐞 Bug Fixes
+
+* UIX not showing in UI editor when editing card ([1520a9c](https://github.com/Lint-Free-Technology/uix/commit/1520a9cb72e0d4f2752b4e41cb95a71f37507768))
+
 <!-- markdownlint-configure-file { "MD024": false } -->
 <!-- markdownlint-configure-file { "MD041": false } -->
 ## [5.0.0-beta.5](https://github.com/Lint-Free-Technology/uix/compare/v5.0.0-beta.4...v5.0.0-beta.5) (2026-02-22)

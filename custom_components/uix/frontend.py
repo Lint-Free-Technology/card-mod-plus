@@ -31,10 +31,10 @@ async def async_register_frontend_script_resource(hass: HomeAssistant, url: str)
 
     version = await hass.async_add_executor_job(get_version, hass)
     
-    # Serve the Card-mod Plus controller and add it as extra_module_url
+    # Serve the Uix controller and add it as extra_module_url
     add_extra_js_url(hass, f"/{DOMAIN}/{FRONTEND_SCRIPT_URL}?v={version}")
 
-    # Also load Card-mod Plus as a lovelace resource so it's accessible to Cast
+    # Also load Uix as a lovelace resource so it's accessible to Cast
     resources = hass.data["lovelace"].resources
     resourceUrl = f"/{DOMAIN}/{FRONTEND_SCRIPT_URL}?v={version}"
     if resources:

@@ -12,7 +12,7 @@ from .const import (
     CARD_MOD_FRONTEND_SCRIPT_URL
 )
 
-class CardModPlusConfigFlow(ConfigFlow, domain=DOMAIN):
+class UixConfigFlow(ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 

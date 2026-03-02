@@ -1,7 +1,7 @@
 {
   "name": "uix",
   "private": true,
-  "version": "5.2.0",
+  "version": "5.2.1-beta.2",
   "description": "UIX - UI eXtension for Home Assistant",
   "scripts": {
     "build": "rollup -c",

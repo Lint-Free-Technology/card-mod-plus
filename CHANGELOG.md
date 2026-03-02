@@ -1,3 +1,15 @@
+## [5.2.1-beta.2](https://github.com/Lint-Free-Technology/uix/compare/v5.2.1-beta.1...v5.2.1-beta.2) (2026-03-01)
+
+### ⚙️ Miscellaneous
+
+* Uix naming in integration code and dev container ([f6a782a](https://github.com/Lint-Free-Technology/uix/commit/f6a782af9c4e023cebc42f2150082f1bb0d39242))
+
+## [5.2.1-beta.1](https://github.com/Lint-Free-Technology/uix/compare/v5.2.0...v5.2.1-beta.1) (2026-02-27)
+
+### 🐞 Bug Fixes
+
+* hassfest updates ahead of submission to HACS ([065dc1c](https://github.com/Lint-Free-Technology/uix/commit/065dc1cbe07297bdd73aa0023722ad44be317dee))
+
 ## [5.2.0](https://github.com/Lint-Free-Technology/uix/compare/v5.1.0...v5.2.0) (2026-02-27)
 
 ### ⭐ New Features

@@ -1,4 +1,4 @@
-name: Validate
+name: Validate with HACS
 
 on:
   push:
@@ -17,4 +17,3 @@ jobs:
         uses: "hacs/action@main"
         with:
           category: "integration"
-          ignore: "brands"

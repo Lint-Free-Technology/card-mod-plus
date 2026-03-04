@@ -1,3 +1,9 @@
+## [5.2.2-beta.1](https://github.com/Lint-Free-Technology/uix/compare/v5.2.1...v5.2.2-beta.1) (2026-03-04)
+
+### 🐞 Bug Fixes
+
+* Remove UI warnings whe using uix config when editing badges ([edc2f28](https://github.com/Lint-Free-Technology/uix/commit/edc2f2876df04034218e48a49d38c49d70a4ba6f))
+
 ## [5.2.1](https://github.com/Lint-Free-Technology/uix/compare/v5.2.0...v5.2.1) (2026-03-03)
 
 ### 🐞 Bug Fixes

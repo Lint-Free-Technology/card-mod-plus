@@ -44,10 +44,13 @@ export function buildMacros(macros: Record<string, MacroConfig>): string {
     Object.entries(macros)
       .map(([name, config]) => {
         const params = (config.params ?? []).join(", ");
-        // When returns is true the template body calls HA's returns() extension
-        // function. No extra wrapping is needed; returns() is available inside
-        // any Jinja macro executed by Home Assistant.
-        return `{% macro ${name}(${params}) %}${config.template}{% endmacro %}`;
+        let macro = `{% macro ${name}(${params}) %}${config.template}{% endmacro %}`;
+        // When returns is true, apply HA's as_function filter so the macro
+        // can be called as a regular function and returns() is injected automatically.
+        if (config.returns) {
+          macro += `\n{% set ${name} = ${name} | as_function %}`;
+        }
+        return macro;
       })
       .join("\n") + "\n"
   );

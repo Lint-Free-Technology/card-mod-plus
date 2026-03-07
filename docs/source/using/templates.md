@@ -32,20 +32,20 @@ UI eXtension supports reusable [Jinja2 macros](https://jinja.palletsprojects.com
 
 ### Defining macros on a card
 
-Macros are defined under `uix.macros` in the card configuration:
+Macros are defined under `uix.macros` in the card configuration. A macro without `returns` renders its template inline as a string — use this when you want to substitute a text value (such as a CSS color or icon name) directly into the template:
 
 ```yaml
 type: tile
 entity: light.living_room
 uix:
   macros:
-    is_on:
+    state_color:
       params:
         - entity_id
-      template: "{{ states(entity_id) == 'on' }}"
+      template: "{{ 'yellow' if states(entity_id) == 'on' else 'gray' }}"
   style: |
     ha-card {
-      background: {% if is_on(config.entity) %}yellow{% else %}gray{% endif %};
+      background: {{ state_color(config.entity) }};
     }
 ```
 
@@ -55,13 +55,17 @@ Each macro entry supports the following keys:
 |-----|----------|-------------|
 | `template` | Yes | The Jinja2 template body of the macro. |
 | `params` | No | A list of parameter names the macro accepts. |
-| `returns` | No | Set to `true` to make the macro callable as a function using Home Assistant's `as_function` filter. When `true`, use `{%- do returns(<value>) -%}` inside the template to return a value. |
+| `returns` | No | Set to `true` to make the macro callable as a function using Home Assistant's `as_function` filter. When `true`, use `{%- do returns(<value>) -%}` inside the template to return a typed value (boolean, number, etc.). |
 
 ### Macros with `returns`
 
-When `returns: true`, the macro follows Home Assistant's [`as_function`](https://www.home-assistant.io/docs/configuration/templating/#as_function) convention: the macro is internally named `macro_<name>` and exposed as `<name>` so it can be called as a regular function (e.g. `{{ is_on(entity_id) }}`).
+When a macro renders inline (no `returns`), its output is always a string — even `{{ states(entity_id) == 'on' }}` produces the string `"True"` or `"False"`, and any non-empty string is truthy in Jinja2. To return an actual boolean or numeric value that behaves correctly in conditionals and comparisons, use `returns: true`.
+
+When `returns: true`, the macro follows Home Assistant's [`as_function`](https://www.home-assistant.io/docs/configuration/templating/#as_function) convention: the macro is internally named `macro_<name>` and exposed as `<name>` so it can be called as a regular function returning the value passed to `do returns(...)`:
 
 ```yaml
+type: tile
+entity: light.living_room
 uix:
   macros:
     is_on:

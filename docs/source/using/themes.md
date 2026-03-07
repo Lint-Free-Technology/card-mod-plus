@@ -18,7 +18,6 @@
 - `uix-heading-badge`
 - `uix-assist-chip`
 - `uix-element`
-
 - `uix-root`
 - `uix-view`
 - `uix-more-info`
@@ -27,6 +26,8 @@
 - `uix-panel-custom`
 - `uix-top-app-bar-fixed`
 - `uix-dialog`
+- `uix-developer-tools`
+- `uix-grid-section`
 
 Also `<any variable>-yaml`.
 

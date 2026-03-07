@@ -24,8 +24,15 @@ export class ModdedElement extends LitElement {
 
 export type UixStyle = string | { [key: string]: UixStyle };
 
+export interface MacroParamConfig {
+  name: string;
+  default: string;
+}
+
+export type MacroParam = string | MacroParamConfig;
+
 export interface MacroConfig {
-  params?: string[];
+  params?: MacroParam[];
   returns?: boolean;
   template: string;
 }
@@ -40,16 +47,21 @@ interface UixConfig {
 
 export function buildMacros(macros: Record<string, MacroConfig>): string {
   if (!macros || Object.keys(macros).length === 0) return "";
+  const renderParam = (p: MacroParam): string =>
+    typeof p === "string" ? p : `${p.name} = ${p.default}`;
   return (
     Object.entries(macros)
       .map(([name, config]) => {
-        const params = (config.params ?? []).join(", ");
+        const params = (config.params ?? []).map(renderParam).join(", ");
         if (config.returns) {
           // Follow HA's as_function convention: define the macro as macro_<name>
           // with `returns` as the last parameter (injected by as_function), then
           // expose it as <name> via the as_function filter so it can be called
           // as a regular function.
-          const returnsParams = [...(config.params ?? []), "returns"].join(", ");
+          const returnsParams = [
+            ...(config.params ?? []).map(renderParam),
+            "returns",
+          ].join(", ");
           return (
             `{% macro macro_${name}(${returnsParams}) %}${config.template}{% endmacro %}\n` +
             `{% set ${name} = macro_${name} | as_function %}`

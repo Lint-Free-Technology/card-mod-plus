@@ -42,7 +42,11 @@ uix:
     state_color:
       params:
         - entity_id
-      template: "{{ 'yellow' if states(entity_id) == 'on' else 'gray' }}"
+        - name: color_on
+          default: "'yellow'"
+        - name: color_off
+          default: "'gray'"
+      template: "{{ color_on if states(entity_id) == 'on' else color_off }}"
   style: |
     ha-card {
       background: {{ state_color(config.entity) }};
@@ -54,8 +58,30 @@ Each macro entry supports the following keys:
 | Key | Required | Description |
 |-----|----------|-------------|
 | `template` | Yes | The Jinja2 template body of the macro. |
-| `params` | No | A list of parameter names the macro accepts. |
+| `params` | No | A list of parameters the macro accepts. Each entry is either a plain string (parameter name) or a mapping with `name` and `default` keys (see below). |
 | `returns` | No | Set to `true` to make the macro callable as a function using Home Assistant's `as_function` filter. When `true`, use `{%- do returns(<value>) -%}` inside the template to return a typed value (boolean, number, etc.). |
+
+Each item in `params` can be either:
+
+- A **plain string** — just the parameter name: `- entity_id`
+- A **mapping** with `name` and `default` — the parameter name and its Jinja2 default expression:
+
+```yaml
+params:
+  - entity_id
+  - name: color_on
+    default: "'yellow'"
+  - name: color_off
+    default: "'gray'"
+```
+
+This generates the following Jinja2 macro signature:
+
+```jinja
+{% macro state_color(entity_id, color_on = 'yellow', color_off = 'gray') %}{{ color_on if states(entity_id) == 'on' else color_off }}{% endmacro %}
+```
+
+The `default` value is injected verbatim as a Jinja2 expression. Quote string values with single quotes inside the YAML string (e.g. `"'yellow'"`).
 
 ### Macros with `returns`
 

@@ -61,7 +61,7 @@ Each macro entry supports the following keys:
 
 When a macro renders inline (no `returns`), its output is always a string — even `{{ states(entity_id) == 'on' }}` produces the string `"True"` or `"False"`, and any non-empty string is truthy in Jinja2. To return an actual boolean or numeric value that behaves correctly in conditionals and comparisons, use `returns: true`.
 
-When `returns: true`, the macro follows Home Assistant's [`as_function`](https://www.home-assistant.io/docs/configuration/templating/#as_function) convention: the macro is internally named `macro_<name>` and exposed as `<name>` so it can be called as a regular function returning the value passed to `do returns(...)`:
+When `returns: true`, the macro follows Home Assistant's [`as_function`](https://www.home-assistant.io/docs/configuration/templating/#as_function) convention: the macro is internally named `macro_<name>` with `returns` added as its last parameter, then exposed as `<name>` via the `as_function` filter. The `returns` callable is injected automatically when the macro is invoked as a function:
 
 ```yaml
 type: tile
@@ -82,7 +82,7 @@ uix:
 This generates the following Jinja2 block that is prepended to every template:
 
 ```jinja
-{% macro macro_is_on(entity_id) %}{%- do returns(states(entity_id) == 'on') -%}{% endmacro %}
+{% macro macro_is_on(entity_id, returns) %}{%- do returns(states(entity_id) == 'on') -%}{% endmacro %}
 {% set is_on = macro_is_on | as_function %}
 ```
 

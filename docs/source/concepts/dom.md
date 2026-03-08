@@ -90,6 +90,9 @@ Chains ending with `$` is a special case for convenience, selecting the shadow r
 
 ## DOM inspection helpers
 
+!!! tip "DOM inspection helpers"
+    DOM inspection helpers currently available in 5.3.0 beta
+
 UIX ships two browser console helpers that make it easier to discover valid style paths and understand the UIX element hierarchy at runtime. Open your browser's DevTools console, select an element in the **Elements** panel (it becomes `$0`), then call one of the functions below.
 
 ### `uix_tree($0)` — general helper
@@ -110,7 +113,7 @@ uix_tree($0)
     After selecting a card element in the inspector and running `uix_tree($0)`, the console output might look like:
 
     ```
-    🌳 UIX Tree Debug
+    💡 UIX Tree 💡
       Target element: <hui-card>
       📦 Closest UIX Parent
         Element: <hui-card>
@@ -147,7 +150,7 @@ uix_path($0)
     After selecting the `<h3>` heading inside a markdown card and running `uix_path($0)`:
 
     ```
-    🎯 UIX Path Debug
+    💡 UIX Path 💡
       Target element: <h3>
       📦 Closest UIX Parent
         Element: <hui-markdown-card>

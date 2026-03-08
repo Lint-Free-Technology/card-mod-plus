@@ -356,9 +356,9 @@ async function getActiveChildren(
     return;
   }
 
-  const TITLE_STYLE = "color:#CE3226;font-weight:bold;font-size:1.1em;";
+  const TITLE_STYLE = "color: white; background-color: #CE3226; padding: 2px 5px; font-weight: bold; border-radius: 5px;";
   const SECTION_STYLE = "color:#888;font-weight:bold;";
-  console.group("%c🌳 UIX Tree Debug", TITLE_STYLE);
+  console.group("%c💡 UIX Tree 💡", TITLE_STYLE);
   console.log("Target element:", element);
 
   const parent = findUixParent(element);
@@ -430,9 +430,9 @@ async function getActiveChildren(
     return;
   }
 
-  const TITLE_STYLE = "color:#CE3226;font-weight:bold;font-size:1.1em;";
+  const TITLE_STYLE = "color: white; background-color: #CE3226; padding: 2px 5px; font-weight: bold; border-radius: 5px;";
   const SECTION_STYLE = "color:#888;font-weight:bold;";
-  console.group("%c🎯 UIX Path Debug", TITLE_STYLE);
+  console.group("%c💡 UIX Path 💡", TITLE_STYLE);
   console.log("Target element:", element);
 
   const parent = findUixParent(element);

@@ -87,3 +87,79 @@ Chains ending with `$` is a special case for convenience, selecting the shadow r
     then UIX will be able to retry looking from the `ha-map $` point at a later time, which may lead to more stable results.
 
     In short, if things seem to be working intermittently, then try splitting up the chain into several steps.
+
+## DOM inspection helpers
+
+UIX ships two browser console helpers that make it easier to discover valid style paths and understand the UIX element hierarchy at runtime. Open your browser's DevTools console, select an element in the **Elements** panel (it becomes `$0`), then call one of the functions below.
+
+### `uix_tree($0)` — general helper
+
+Reports everything UIX knows about the area surrounding the selected element:
+
+| Section | What it shows |
+|---------|---------------|
+| **📦 Closest UIX Parent** | The nearest ancestor element that has a non-child `uix-node` attached, with its UIX type (e.g. `card`, `view`). |
+| **👶 Active UIX Children** | Paths that are currently being styled as children of the UIX parent, with the resolved DOM elements shown. |
+| **🗺️ Available Style Paths** | Every element path reachable within the UIX parent's shadow DOM subtree (stopping at the next UIX parent boundary). These are valid keys for a UIX `style:` config. |
+
+```js
+uix_tree($0)
+```
+
+??? example
+    After selecting a card element in the inspector and running `uix_tree($0)`, the console output might look like:
+
+    ```
+    🌳 UIX Tree Debug
+      Target element: <hui-card>
+      📦 Closest UIX Parent
+        Element: <hui-card>
+        UIX type: card
+      👶 Active UIX Children: none
+      🗺️ Available Style Paths  (8)
+        "."
+        "ha-card"
+        "ha-card $ .card-content"
+        "ha-card $ .card-header"
+        ...
+    ```
+
+    You can now paste any of the listed paths directly into your UIX `style:` config as a key.
+
+### `uix_path($0)` — specific helper
+
+Reports the exact UIX path to the selected element and generates a ready-to-paste YAML snippet:
+
+| Section | What it shows |
+|---------|---------------|
+| **📦 Closest UIX Parent** | Same as `uix_tree`. |
+| **📍 UIX Path to Target** | The exact path string (using `$` for shadow-root crossings) from the UIX parent context to `$0`. Use this as the key in a UIX `style:` config. |
+| **🎨 CSS Target** | Tag name, id, classes and a suggested CSS selector within the element's containing shadow root. |
+| **📝 Boilerplate UIX YAML** | A paste-ready YAML snippet to get you started. |
+
+```js
+uix_path($0)
+```
+
+??? example
+    After selecting the `<h3>` heading inside a markdown card and running `uix_path($0)`:
+
+    ```
+    🎯 UIX Path Debug
+      Target element: <h3>
+      📦 Closest UIX Parent
+        Element: <hui-markdown-card>
+        UIX type: card
+      📍 UIX Path to Target
+        Path: "ha-markdown $"
+      🎨 CSS Target
+        Tag: h3
+        Suggested CSS selector within shadow root: h3
+      📝 Boilerplate UIX YAML
+        uix:
+          style:
+            "ha-markdown $": |
+              h3 {
+                /* your styles for h3 */
+              }
+    ```

@@ -1,3 +1,9 @@
+## [5.3.0-beta.1](https://github.com/Lint-Free-Technology/uix/compare/v5.2.2...v5.3.0-beta.1) (2026-03-08)
+
+### ⭐ New Features
+
+* Macro support for UIX templates - See https://uix.lf.technology/using/templates/[#macros](https://github.com/Lint-Free-Technology/uix/issues/macros) ([#75](https://github.com/Lint-Free-Technology/uix/issues/75)) ([3f6dd64](https://github.com/Lint-Free-Technology/uix/commit/3f6dd64a504d2760503b315803c9f08f02c6e034))
+
 ## [5.2.2](https://github.com/Lint-Free-Technology/uix/compare/v5.2.1...v5.2.2) (2026-03-07)
 
 ### 🐞 Bug Fixes

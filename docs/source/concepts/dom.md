@@ -117,16 +117,16 @@ uix_tree($0)
         UIX type: card
       👶 Active UIX Children: none
       🗺️ Available YAML Selectors  (2 YAML selectors, 5 CSS selectors)
-        "."  (2 CSS selectors)
-          ha-card
-          ha-card ha-markdown
-        "ha-markdown $"  (3 CSS selectors)
-          h3
-          p
-          p span
+        ".":  (2 CSS selectors)
+          ha-card  <ha-card>
+          ha-card ha-markdown  <ha-markdown>
+        "ha-markdown $":  (3 CSS selectors)
+          h3  <h3>
+          p  <p>
+          p span  <span>
     ```
 
-    Each group is a YAML style key. The CSS selectors inside are valid within that key's style string.
+    Each group label shows a YAML style key followed by the required `:` syntax. The CSS selectors inside are valid within that key's style string. Each selector is followed by a clickable element reference — click it to jump straight to that element in the DevTools inspector.
 
 ### `uix_path($0)` — specific helper
 
@@ -136,7 +136,7 @@ Reports the exact UIX path to the selected element and generates a ready-to-past
 |---------|---------------|
 | **📦 Closest UIX Parent** | Same as `uix_tree`. |
 | **📍 UIX Path to Target** | The exact path string (using `$` for shadow-root crossings) from the UIX parent context to `$0`. Use this as the key in a UIX `style:` config. |
-| **🎨 CSS Target** | Tag name, id, classes and a suggested CSS selector within the element's containing shadow root. |
+| **🎨 CSS Target** | Tag name, id, classes and a suggested CSS selector for the element — each followed by a clickable element reference to jump straight to it in the DevTools inspector. |
 | **📝 Boilerplate UIX YAML** | A paste-ready YAML snippet to get you started. |
 
 ```js
@@ -153,10 +153,10 @@ uix_path($0)
         Element: <hui-markdown-card>
         UIX type: card
       📍 UIX Path to Target
-        Path: "ha-markdown $"
+        Path: "ha-markdown $":
       🎨 CSS Target
         Tag: h3
-        Suggested CSS selector within shadow root: h3
+        Suggested CSS selector: h3  <h3>
       📝 Boilerplate UIX YAML
         uix:
           style:
@@ -165,3 +165,5 @@ uix_path($0)
                 /* your styles for h3 */
               }
     ```
+
+    The **Path** line shows the YAML key including the required `:`. The **Suggested CSS selector** is followed by a clickable element reference that jumps to the element in DevTools.

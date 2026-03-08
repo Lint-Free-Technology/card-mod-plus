@@ -221,11 +221,18 @@ function buildPathKeyAndCssSelector(
 // in the group are valid CSS within the style string for that key.
 // ---------------------------------------------------------------------------
 
+interface CssSelectorEntry {
+  /** CSS selector within the shadow context */
+  selector: string;
+  /** The DOM element this selector targets, for inspector linking */
+  element: Element;
+}
+
 interface StyleGroup {
   /** YAML path key – ends at the last shadow-root boundary or "." */
   pathKey: string;
-  /** CSS selectors available within that shadow context */
-  cssSelectors: string[];
+  /** CSS selector entries (selector + element reference) within that shadow context */
+  cssSelectors: CssSelectorEntry[];
 }
 
 // Limit traversal depth to avoid spending excessive time on deeply-nested
@@ -235,10 +242,10 @@ const MAX_TRAVERSAL_DEPTH = 6;
 
 function collectSubtreeGroups(uixParentEl: Element): StyleGroup[] {
   // Preserve insertion order so groups appear top-down as encountered.
-  const groups = new Map<string, string[]>();
+  const groups = new Map<string, CssSelectorEntry[]>();
   const visited = new WeakSet<Element>();
 
-  function getGroup(pathKey: string): string[] {
+  function getGroup(pathKey: string): CssSelectorEntry[] {
     let group = groups.get(pathKey);
     if (!group) {
       group = [];
@@ -269,7 +276,7 @@ function collectSubtreeGroups(uixParentEl: Element): StyleGroup[] {
       const sel = buildSelector(child);
       const newCssParts = [...cssParts, sel];
       const pathKey = shadowParts.join(" ").trim() || ".";
-      getGroup(pathKey).push(newCssParts.join(" ").trim());
+      getGroup(pathKey).push({ selector: newCssParts.join(" ").trim(), element: child });
 
       // Do not descend into another UIX parent (different styling boundary)
       const isNextUixParent = ((child as any)._uix ?? []).some(
@@ -403,8 +410,8 @@ async function getActiveChildren(
     "  Each group is a YAML style key; CSS selectors inside are valid within that key's style string:"
   );
   for (const { pathKey, cssSelectors } of groups) {
-    console.groupCollapsed(`  "${pathKey}"  (${pl(cssSelectors.length, "CSS selector")})`);
-    cssSelectors.forEach((s) => console.log(`  ${s}`));
+    console.groupCollapsed(`  "${pathKey}":  (${pl(cssSelectors.length, "CSS selector")})`);
+    cssSelectors.forEach(({ selector, element: el }) => console.log(`  ${selector}`, el));
     console.groupEnd();
   }
 
@@ -454,7 +461,7 @@ async function getActiveChildren(
   const { pathKey, cssSelector } = result;
 
   console.log("%c📍 UIX Path to Target", SECTION_STYLE);
-  console.log("  Path:", `"${pathKey}"`);
+  console.log("  Path:", `"${pathKey}":`);
 
   // --- CSS target info ---
   console.log("%c🎨 CSS Target", SECTION_STYLE);
@@ -468,7 +475,7 @@ async function getActiveChildren(
         .join("  ")
     );
   }
-  console.log("  Suggested CSS selector:", cssSelector);
+  console.log("  Suggested CSS selector:", cssSelector, element);
 
   // --- Boilerplate YAML ---
   let yaml: string;

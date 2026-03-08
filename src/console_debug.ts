@@ -195,22 +195,50 @@ function buildPathKeyAndCssSelector(
 }
 
 // ---------------------------------------------------------------------------
-// Collect all element paths reachable from the UIX parent context, up to
+// Collect all style groups reachable from the UIX parent context, up to
 // (but not including) the next UIX parent boundary.
+//
+// Each group corresponds to a YAML path key (stopping at the last shadow-root
+// crossing, i.e. ending with "$", or "." for the root context).  The selectors
+// in the group are valid CSS within the style string for that key.
 // ---------------------------------------------------------------------------
+
+interface StyleGroup {
+  /** YAML path key – ends at the last shadow-root boundary or "." */
+  pathKey: string;
+  /** CSS selectors available within that shadow context */
+  cssSelectors: string[];
+}
 
 // Limit traversal depth to avoid spending excessive time on deeply-nested
 // shadow DOM trees while still covering the most common two-to-three level
 // hierarchies found in Home Assistant cards.
 const MAX_TRAVERSAL_DEPTH = 6;
 
-function collectSubtreePaths(uixParentEl: Element): string[] {
-  const paths: string[] = ["."];
+function collectSubtreeGroups(uixParentEl: Element): StyleGroup[] {
+  // Preserve insertion order so groups appear top-down as encountered.
+  const groups = new Map<string, string[]>();
   const visited = new WeakSet<Element>();
 
+  function getGroup(pathKey: string): string[] {
+    let group = groups.get(pathKey);
+    if (!group) {
+      group = [];
+      groups.set(pathKey, group);
+    }
+    return group;
+  }
+
+  /**
+   * @param node        - current DOM node being iterated
+   * @param shadowParts - path segments that form the path KEY (up to + incl. last "$")
+   * @param cssParts    - CSS selector parts within the current shadow context
+   * @param depth       - recursion guard
+   */
   function traverse(
     node: Element | ShadowRoot,
-    currentParts: string[],
+    shadowParts: string[],
+    cssParts: string[],
     depth: number
   ) {
     if (depth > MAX_TRAVERSAL_DEPTH) return;
@@ -220,8 +248,9 @@ function collectSubtreePaths(uixParentEl: Element): string[] {
       visited.add(child);
 
       const sel = buildSelector(child);
-      const childParts = [...currentParts, sel];
-      paths.push(childParts.join(" ").trim());
+      const newCssParts = [...cssParts, sel];
+      const pathKey = shadowParts.join(" ").trim() || ".";
+      getGroup(pathKey).push(newCssParts.join(" ").trim());
 
       // Do not descend into another UIX parent (different styling boundary)
       const isNextUixParent = ((child as any)._uix ?? []).some(
@@ -229,15 +258,20 @@ function collectSubtreePaths(uixParentEl: Element): string[] {
       );
       if (!isNextUixParent) {
         if (child.shadowRoot) {
-          traverse(child.shadowRoot, [...childParts, "$"], depth + 1);
+          // Entering a shadow root: new path key includes everything up to "$"
+          const newShadowParts = [...shadowParts, ...newCssParts, "$"];
+          traverse(child.shadowRoot, newShadowParts, [], depth + 1);
         }
-        traverse(child, childParts, depth + 1);
+        traverse(child, shadowParts, newCssParts, depth + 1);
       }
     }
   }
 
-  traverse(uixContext(uixParentEl), [], 0);
-  return paths;
+  traverse(uixContext(uixParentEl), [], [], 0);
+  return Array.from(groups.entries()).map(([pathKey, cssSelectors]) => ({
+    pathKey,
+    cssSelectors,
+  }));
 }
 
 // ---------------------------------------------------------------------------
@@ -335,12 +369,20 @@ async function getActiveChildren(
   }
 
   // --- Available Style Paths ---
-  const paths = collectSubtreePaths(parent.element);
-  console.group(`🗺️ Available Style Paths  (${paths.length})`);
-  console.log(
-    "Use these as keys in the UIX style config (relative to the UIX parent):"
+  const groups = collectSubtreeGroups(parent.element);
+  const totalSelectors = groups.reduce((n, g) => n + g.cssSelectors.length, 0);
+  const pl = (n: number, word: string) => `${n} ${word}${n !== 1 ? "s" : ""}`;
+  console.group(
+    `🗺️ Available Style Paths  (${pl(groups.length, "shadow context")}, ${pl(totalSelectors, "selector")})`
   );
-  paths.forEach((p) => console.log(`  "${p}"`));
+  console.log(
+    "Each group is a YAML path key; selectors inside are valid CSS within that key's style string:"
+  );
+  for (const { pathKey, cssSelectors } of groups) {
+    console.groupCollapsed(`"${pathKey}"  (${pl(cssSelectors.length, "selector")})`);
+    cssSelectors.forEach((s) => console.log(`  ${s}`));
+    console.groupEnd();
+  }
   console.groupEnd();
 
   console.groupEnd();

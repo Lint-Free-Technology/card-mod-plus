@@ -183,11 +183,20 @@ function buildPathKeyAndCssSelector(
     return { pathKey: ".", cssSelector };
   }
 
-  // Path key: everything up to and including the last "$"
+  // Path key: only the shadow host (element immediately before each "$") plus "$".
+  // Intermediate elements between shadow-root crossings are omitted so the key
+  // stays as short as possible, e.g. "ha-select $ ha-picker-field $" rather than
+  // "hui-generic-entity-row ha-select $ ha-dropdown ha-picker-field $".
   const keyParts: string[] = [];
   for (let i = 0; i <= lastShadowIdx; i++) {
     const seg = segments[i];
-    keyParts.push(seg.kind === "element" ? seg.sel : "$");
+    if (seg.kind === "shadow") {
+      keyParts.push("$");
+    } else if (i + 1 <= lastShadowIdx && segments[i + 1].kind === "shadow") {
+      // Only include an element segment when it is the direct host of the next "$"
+      keyParts.push(seg.sel);
+    }
+    // Otherwise skip: intermediate elements before a shadow boundary are dropped
   }
   const pathKey = keyParts.join(" ").trim();
 
@@ -268,8 +277,11 @@ function collectSubtreeGroups(uixParentEl: Element): StyleGroup[] {
       );
       if (!isNextUixParent) {
         if (child.shadowRoot) {
-          // Entering a shadow root: new path key includes everything up to "$"
-          const newShadowParts = [...shadowParts, ...newCssParts, "$"];
+          // Entering a shadow root: the path key only records the direct shadow host
+          // (the element immediately before "$"), not the full intermediate chain.
+          // This produces concise keys like "ha-select $ ha-picker-field $" rather
+          // than "hui-generic-entity-row ha-select $ ha-dropdown ha-picker-field $".
+          const newShadowParts = [...shadowParts, sel, "$"];
           traverse(child.shadowRoot, newShadowParts, [], depth + 1);
         }
         traverse(child, shadowParts, newCssParts, depth + 1);
@@ -380,18 +392,18 @@ async function getActiveChildren(
     console.log("%c👶 Active UIX Children: none", SECTION_STYLE);
   }
 
-  // --- Available Style Paths ---
+  // --- Available YAML Selectors ---
   const groups = collectSubtreeGroups(parent.element);
   const totalSelectors = groups.reduce((n, g) => n + g.cssSelectors.length, 0);
   console.log(
-    `%c🗺️ Available Style Paths  (${pl(groups.length, "shadow context")}, ${pl(totalSelectors, "selector")})`,
+    `%c🗺️ Available YAML Selectors  (${pl(groups.length, "YAML selector")}, ${pl(totalSelectors, "CSS selector")})`,
     SECTION_STYLE
   );
   console.log(
-    "  Each group is a YAML path key; selectors inside are valid CSS within that key's style string:"
+    "  Each group is a YAML style key; CSS selectors inside are valid within that key's style string:"
   );
   for (const { pathKey, cssSelectors } of groups) {
-    console.groupCollapsed(`  "${pathKey}"  (${pl(cssSelectors.length, "selector")})`);
+    console.groupCollapsed(`  "${pathKey}"  (${pl(cssSelectors.length, "CSS selector")})`);
     cssSelectors.forEach((s) => console.log(`  ${s}`));
     console.groupEnd();
   }

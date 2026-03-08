@@ -100,7 +100,7 @@ Reports everything UIX knows about the area surrounding the selected element:
 |---------|---------------|
 | **📦 Closest UIX Parent** | The nearest ancestor element that has a non-child `uix-node` attached, with its UIX type (e.g. `card`, `view`). |
 | **👶 Active UIX Children** | Paths that are currently being styled as children of the UIX parent, with the resolved DOM elements shown. |
-| **🗺️ Available Style Paths** | Every element path reachable within the UIX parent's shadow DOM subtree (stopping at the next UIX parent boundary). These are valid keys for a UIX `style:` config. |
+| **🗺️ Available YAML Selectors** | Every YAML style key reachable within the UIX parent's shadow DOM subtree (stopping at the next UIX parent boundary). Each key maps to one shadow context; inside you'll find the CSS selectors valid for that key's style string. |
 
 ```js
 uix_tree($0)
@@ -116,15 +116,17 @@ uix_tree($0)
         Element: <hui-card>
         UIX type: card
       👶 Active UIX Children: none
-      🗺️ Available Style Paths  (8)
-        "."
-        "ha-card"
-        "ha-card $ .card-content"
-        "ha-card $ .card-header"
-        ...
+      🗺️ Available YAML Selectors  (2 YAML selectors, 5 CSS selectors)
+        "."  (2 CSS selectors)
+          ha-card
+          ha-card ha-markdown
+        "ha-markdown $"  (3 CSS selectors)
+          h3
+          p
+          p span
     ```
 
-    You can now paste any of the listed paths directly into your UIX `style:` config as a key.
+    Each group is a YAML style key. The CSS selectors inside are valid within that key's style string.
 
 ### `uix_path($0)` — specific helper
 

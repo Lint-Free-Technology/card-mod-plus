@@ -244,6 +244,7 @@ function collectSubtreeGroups(uixParentEl: Element): StyleGroup[] {
     if (depth > MAX_TRAVERSAL_DEPTH) return;
     for (const child of Array.from((node as ParentNode).children ?? [])) {
       if (child.localName === "uix-node") continue;
+      if (child.localName === "style") continue;
       if (visited.has(child)) continue;
       visited.add(child);
 

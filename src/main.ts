@@ -1,5 +1,6 @@
 // Any bootstrap listeners to be included prior to card-mod import
 import "./ll-custom-actions";
+import "./console_debug";
 import "./coordinator/coordinator";
 import "./patch/ha-icon";
 import "./uix";
